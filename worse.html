@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    .dropdown {
+      position: relative;
+      display: none;
+      background-color: #cccccc;
+      top: -75px;
+      width: 40px;
+      height: 20px;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      top: 20px;
+      left: 0px;
+      background-color: #f9f9f9;
+      min-width: 290px;
+      box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+      padding: 6px 6px;
+      z-index: 1;
+      float: right;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .dropdown-content:hover {
+      display: block;
+    }
+
+    #svg {
+      clear: both;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h2>Measuring the time to click</h2>
+
+  <!-- These text elements show start & end times -->
+  <p>Label: <span id="start"></span></p>
+  <p>Label: <span id="start_ms"></span></p>
+  <p>Label: <span id="end"></span></p>
+  <p>Label: <span id="end_ms"></span></p>
+  <p>Label: <span id="time"></span></p>
+  <p>Label: <span id="n"></span></p>
+  <p>Label: <span id="sum"></span></p>
+  <p>Label: <span id="average"></span></p>
+
+  <!-- Here are the interface elements that users can click to record start/end times -->
+  <p>
+    <span onclick="set_time()" style="color: red">
+      Click here</span> to start, or <b>click on the red rectangle</b>.
+    <br>
+    <b>Then</b> click on the <b />green rectangle</b>, or click in the <b>dropdown menu</b> .
+  </p>
+
+  <div></div>
+  <svg width="700" height="340" id="svg">
+    <rect x="10" y="50" width="40" height="20" style="fill:rgb(255,0,0);stroke-width:3;stroke:rgb(0,0,0)"
+      onclick="set_time()" id="red-button" />
+
+    <rect x="300" y="150" width="40" height="20"
+      style="fill:rgb(0,255,0);stroke-width:3;stroke:rgb(0,0,0); display: none" onclick="get_time()"
+      id="green-button" />
+    <text x="15" y="64" onclick="get_time()" style="display: none" id="green-text"> Text Example</text>
+  </svg>
+
+  <div class="dropdown">
+    <span>Dropdown Menu</span>
+    <div class="dropdown-content">
+      <p>Menu a</p>
+      <p style="color: green" onclick="get_time()">Menu b</p>
+      <p>Menu c</p>
+      <p>Menu d</p>
+    </div>
+  </div>
+
+  <!-- Here are the functions to calculate & display times -->
+  <script>
+    function set_time() {
+      start_time = new Date();
+      document.getElementById('start').innerHTML = start_time;
+      document.getElementById('start_ms').innerHTML = start_time.getTime();
+      document.getElementById('red-button').style.display = "none";
+      document.getElementById('green-button').style.display = "block";
+      document.getElementById('green-text').style.display = "block";
+      document.getElementsByClassName("dropdown")[0].style.display = "inline-block";
+      document.getElementById("svg").style.width = "350px";
+    }
+    function get_time() {
+      end_time = new Date();
+      document.getElementById('end').innerHTML = end_time;
+      document.getElementById('end_ms').innerHTML = end_time.getTime();
+      start_ms = document.getElementById('start_ms').innerHTML;
+      time_diff = end_time.getTime() - start_ms;
+      document.getElementById('time').innerHTML = time_diff;
+
+
+      n = Number(document.getElementById('n').innerHTML) + 1;
+      document.getElementById('n').innerHTML = n;
+      sum = Number(document.getElementById('sum').innerHTML) + time_diff;
+      document.getElementById('sum').innerHTML = sum;
+      document.getElementById('average').innerHTML = sum / n;
+
+      document.getElementById('red-button').style.display = "block";
+      document.getElementById('green-button').style.display = "none";
+      document.getElementById('green-text').style.display = "none";
+      document.getElementsByClassName("dropdown")[0].style.display = "none";
+      document.getElementById("svg").style.width = "700px";
+    }
+  </script>
+</body>
+
+</html>
